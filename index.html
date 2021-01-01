@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<h1>Hello processing</h1>
+<script src="processing.min.js"></script>
+<script type="text/processing" data-processing-target="processing-canvas">
+
+
+
+class Star{
+  float x;
+  float y;
+  float z;
+
+  float pz;
+
+  //color
+  float red;
+  float green;
+  float blue;
+
+
+  Star() {
+  x = random(-width, width);
+  y = random(-height, height);
+  z = random(width);
+  red = random(255);
+  green = random(255);
+  blue = random(255);
+  }
+  
+
+  void update(){
+    z = z - speed; //star moving speed;
+    if(z < 1){
+      z = width;
+      x = random(-width, width);
+      y = random(-height, height);
+      pz = z;
+    }
+  }
+
+  void show(){
+
+    noStroke();
+    float sx = map(x / z, 0, 1, 0, width );
+    float sy = map(y / z, 0, 1, 0, height );
+
+
+    float r = map(z, 0, width, 8, 0);
+    fill(red, green, blue);
+    //ellipse(sx, sy, r, r);
+
+    float px = map(x / pz, 0, 1, 0, width );
+    float py = map(y / pz, 0, 1, 0, height );
+    
+    pz = z;
+
+    stroke(red, green, blue);
+    line(px, py, sx, sy);
+    px = x;
+    py = y;
+  }
+}
+
+Star[] stars = new Star[400];
+
+float speed;
+
+
+void setup() {
+  size(400, 400);
+  for(int i = 0; i < stars.length; i++){
+    stars[i] = new Star();
+  }
+}
+
+void draw() {
+  speed = map(mouseX, 0, width, 0, 20);
+  background(0);
+  translate(width/2, height/2);
+  for(int i = 0; i < stars.length; i++){
+    stars[i].update();
+    stars[i].show();
+  }
+}
+
+</script>
+<canvas id="processing-canvas"></canvas>
+  
+</body>
+</html>
+
+
+
